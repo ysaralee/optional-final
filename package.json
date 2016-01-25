@@ -17,7 +17,8 @@
   },
   "homepage": "https://github.com/kljensen/cpsc113-social-todo-node#readme",
   "dependencies": {
-    "express": "^4.13.4"
+    "express": "^4.13.4",
+    "express-handlebars": "^2.0.1"
   },
   "devDependencies": {
     "nodemon": "^1.8.1"
