@@ -1,6 +1,6 @@
 # CPSC113 Social todo app
 
-This is my app. It is going to be sick.
+This is my starter app. It is going to be sick.
 
 ## How to run this
 
