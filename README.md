@@ -29,3 +29,13 @@ videos by commit so that you could rewind this code. That would tough,
 perhaps next time.) This code passes 31 of the tests in the test suite. It
 does everything except task completion and deletion. It is roughly 250 lines
 long, many of which are comments.
+
+1. [Overview of social todo app](https://youtu.be/fZrtAwUUgyE)
+1. [Running the testing code](https://youtu.be/7U5elRuEgR4)
+1. [Getting started with node and express](https://youtu.be/BJPDWI4Muhg)
+1. [add view layer to express](https://youtu.be/LswuoN0Ru68)
+1. [add login forms to views](https://youtu.be/QiVs4iaRMco)
+1. [handle submitted registration form](https://youtu.be/VKz4tKH2mME)
+1. [Add mongodb support](https://youtu.be/fh5yIRR5eTU)
+1. [Add form validation ](https://youtu.be/kMWyKoJ_cwc)
+1. [Add session handling](https://youtu.be/vRxzjfxfCc8)
