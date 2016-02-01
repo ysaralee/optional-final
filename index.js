@@ -132,8 +132,9 @@ app.post('/user/login', function (req, res) {
 
 // Log a user out
 app.get('/user/logout', function(req, res){
-  req.session.destroy();
-  res.redirect('/');
+  req.session.destroy(function(){
+    res.redirect('/');
+  });
 });
 
 //  All the controllers and routes below this require
