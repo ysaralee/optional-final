@@ -1,4 +1,4 @@
-<h1>Social todo app for cpsc113</h1>
+<h1>Social To-Do App for CPSC113</h1>
 
 {{#if errors}}
 <div style="color:red" class="validation-error">
@@ -7,20 +7,20 @@
 {{/if}}
 
 {{#if currentUser}}
-    <h2>Welcome, {{currentUser.name}}</h2>
+    <h2>Welcome, {{currentUser.name}}!</h2>
     <div>
-        <h4>Your Tasks</h4>
+        <h4>Your Tasks:</h4>
+        <hr>
+        <h7>Click to check the box if you've completed your task!</h7>
 
         {{#if tasks}}
             <ul>
             {{#each tasks}}
-                <li class="tasks-list-item">
-                  <span class="task-title">{{this.title}}</span>
-                  <form method="post">
-                    <input type="button" name="delete-task" class="delete-task" value="Delete">
-                  </form>
-                  <form method="post">
-                    <input type="button" name="toggle-task" class="toggle-task" value="Mark complete">
+                <li class="tasks-list-item"> <form method="post">
+                   <input type="checkbox" name="checkbox" class="checkbox" value="Mark Complete"> <span class="task-title">{{this.title}}</span>
+                </form> 
+                  <form action="/task/delete" method="post">
+                    <input type="button" name="delete-task" class="deleteMe" onclick="deleteTask(); return false;" value="Delete">
                   </form>
                 </li>
             {{/each}}
@@ -30,7 +30,7 @@
         {{/if}}
     </div>
     <hr>
-    <div>
+   <div>
         <h4>Add a new task</h4>
         <form action="/task/create" method="POST">
             <label for="title">Task title</label>
@@ -47,6 +47,7 @@
 
 {{else}}
 <div>
+    <h5>Welcome Back! Log-In Here!</h5>
     <form class="login" action="/user/login" method="POST">
         <label for="email">Email</label>
         <input name="email" id="email" type="text"><br>
@@ -55,16 +56,19 @@
         <input type="submit"  class="log-in-submit">
     </form>
 </div>
+<br>
 
+<div><hr></div>
 <div><hr></div>
 
 <div>
+    <h6>New to the Site? Register Here:</h6>
     <form class="register" action="/user/register" method="POST" class="signup-form" style="display: block;">
-      <input name="fl_name" type="text" class="text-input" placeholder="first &amp; last name">
-      <input name="email" type="email" class="text-input" placeholder="email">
-      <input name="password" type="password" class="text-input" placeholder="password">
-      <input name="password_confirmation" type="password" class="text-input" placeholder="password confirmation">
-      <input class="sign-up-submit" type="submit">
+      <input name="fl_name" type="text" class="text-input" placeholder="first &amp; last name"><br>
+      <input name="email" type="email" class="text-input" placeholder="email"><br>
+      <input name="password" type="password" class="text-input" placeholder="password"><br>
+      <input name="password_confirmation" type="password" class="text-input" placeholder="password confirmation"><br>
+      <input class="sign-up-submit" type="submit"><br>
     </form>
 </div>
 {{/if}}

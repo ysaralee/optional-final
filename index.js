@@ -141,6 +141,16 @@ app.get('/user/logout', function(req, res){
 //  the user to be logged in.
 app.use(isLoggedIn);
 
+// Delete task if the delete button is clicked
+app.post('/task/delete', function(req, res){
+  
+});
+
+// Activate function on click of delete button
+button.onclick=function(){
+  
+};
+
 // Handle submission of new task form
 app.post('/task/create', function(req, res){
   var newTask = new Tasks();
