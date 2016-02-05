@@ -65,6 +65,12 @@ function loadUserTasks(req, res, next) {
     .exec(function(err, tasks){
       if(!err){
         res.locals.tasks = tasks;
+        for (i=0; i<tasks.length; i++)
+        {
+          if (res.locals.currentUser._id.toString() == tasks[i].owner.toString()){
+            tasks[i].isOwner = true;
+          }
+        }
       }
       next();
   });
@@ -141,15 +147,31 @@ app.get('/user/logout', function(req, res){
 //  the user to be logged in.
 app.use(isLoggedIn);
 
-// Delete task if the delete button is clicked
-app.post('/task/delete', function(req, res){
-  
+// Mark task as complete when the button is clicked
+app.post('/task/complete/:id', function(req, res){
+  console.log("Hey!");
+  Tasks.findById(req.params.id, function(err, task){
+  if(task.isComplete){
+    Tasks.update({_id: req.params.id}, {isComplete: false}, function(err){
+      if (err) { res.send('Error un-marking the task.') }
+    });
+  }
+  else{
+    Tasks.update({_id: req.params.id}, {isComplete: true}, function(err){
+      if (err) { res.send('Error marking the task.') }
+    });
+  }
+  });
+  res.redirect('/');
 });
 
+
 // Activate function on click of delete button
-button.onclick=function(){
-  
-};
+app.post('/task/delete/:id', function(req, res){
+  console.log(req.params.id);
+  Tasks.find({_id : req.params.id}).remove().exec();
+res.redirect('/');
+});
 
 // Handle submission of new task form
 app.post('/task/create', function(req, res){
