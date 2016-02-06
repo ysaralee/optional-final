@@ -1,3 +1,15 @@
+# CPSC113 Social To-Do App
+
+Thank you Kyle for providing the starter code! It was definitely helpful in constructing the app.
+
+While most of the app comes from the starter code, I made a few changes/implementations (including 
+completing the tasks of creating a complete button, and also deleting the task, only if by the owner).
+
+I changed some of the formatting to be a little more uniform throughout (in terms of filling in 
+the blanks) and also changed the background color.
+
+---
+
 # CPSC113 Social todo app
 
 This is my starter app. It is going to be sick.
