@@ -58,7 +58,6 @@ app.post('/posts/new', function (req, res) {
       res.send('Error saving task!');
     }else{
       startChat = startChat + 1;
-      res.redirect('/posts/:id');
     }
   });
 });
