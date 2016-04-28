@@ -10,7 +10,6 @@ var Chats = require('./models/chats.js');
 var startChat = 0;
 
 
-
 // Configure our app
 var store = new MongoDBStore({
   uri: process.env.MONGO_URL,
@@ -47,6 +46,8 @@ app.get('/mrw/semester-ends.gif', function (req, res) {
       res.redirect(`https://i.imgur.com/pXjrQ.gif`);
 });
 
+
+// store chats into database
 app.post('/new-chat', function (req, res) {
   var chatData = req.body.data;
   var newChat = new Chats();
@@ -62,12 +63,14 @@ app.post('/new-chat', function (req, res) {
   });
 });
 
+// delete all chats in database, reset the chat count to zero
 app.get('/chats/delete', function(req, res){
   Chats.find({}).remove().exec();
   startChat = 0;
   res.redirect('/');
 });
 
+// identify chat in terms of post order
 app.get('/chats/:id', function (req, res) {
   Chats.findOne({insertOrder: req.params.id}, function(err, chat){
 
