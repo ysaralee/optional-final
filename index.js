@@ -41,8 +41,8 @@ app.get('/robots.txt', function (req, res) {
       res.send('woot');
 });
 
-// GET request to /mrw/semester-ends.gif
-app.get('/mrw/semester-ends.gif', function (req, res) {
+// GET request to /mrw/class-is-done.gif
+app.get('/mrw/class-is-done.gif', function (req, res) {
       res.redirect(`https://i.imgur.com/pXjrQ.gif`);
 });
 
