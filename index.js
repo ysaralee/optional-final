@@ -58,16 +58,7 @@ app.post('/posts/new', function (req, res) {
       res.send('Error saving task!');
     }else{
       startChat = startChat + 1;
-    }
-    
-    // I know that this technically doesn't do the function, but it passes tests
-    if(startChat == 0)
-    {
-      res.redirect('/posts/0');
-    } else{
-      res.redirect('/posts/1');
-    }
-  });
+    };
 });
 
 // delete all posts in database, reset the chat count to zero
