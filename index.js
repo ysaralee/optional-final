@@ -43,7 +43,7 @@ app.get('/robots.txt', function (req, res) {
 
 // GET request to /mrw/class-is-done.gif
 app.get('/mrw/class-is-done.gif', function (req, res) {
-      res.redirect(`https://i.imgur.com/pXjrQ.gif`);
+      res.redirect('https://i.imgur.com/pXjrQ.gif');
 });
 
 
@@ -58,8 +58,10 @@ app.post('/posts/new', function (req, res) {
       res.send('Error saving task!');
     }else{
       startChat = startChat + 1;
-    };
+    }
+  });
 });
+
 
 // delete all posts in database, reset the chat count to zero
 app.get('/posts/delete', function(req, res){
