@@ -35,9 +35,9 @@ app.get('/', function (req, res) {
       res.render('index');
 });
 
-// GET request to foo
-app.get('/foo', function (req, res) {
-      res.header("Content-Type", "text/plain");
+// GET request to robots.txt
+app.get('/robots.txt', function (req, res) {
+      res.header("Content-Type", "text/plain; charset=utf-8");
       res.send('woot');
 });
 
@@ -48,7 +48,7 @@ app.get('/mrw/semester-ends.gif', function (req, res) {
 
 
 // store chats into database
-app.post('/new-chat', function (req, res) {
+app.post('/posts/new', function (req, res) {
   var chatData = req.body.data;
   var newChat = new Chats();
   newChat.text = chatData;
@@ -58,20 +58,20 @@ app.post('/new-chat', function (req, res) {
       res.send('Error saving task!');
     }else{
       startChat = startChat + 1;
-      res.redirect('/');
+      res.redirect('/posts/:id');
     }
   });
 });
 
-// delete all chats in database, reset the chat count to zero
-app.get('/chats/delete', function(req, res){
+// delete all posts in database, reset the chat count to zero
+app.get('/posts/delete', function(req, res){
   Chats.find({}).remove().exec();
   startChat = 0;
   res.redirect('/');
 });
 
 // identify chat in terms of post order
-app.get('/chats/:id', function (req, res) {
+app.get('/posts/:id', function (req, res) {
   Chats.findOne({insertOrder: req.params.id}, function(err, chat){
 
     if(err || !chat){

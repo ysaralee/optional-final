@@ -7,3 +7,7 @@ The code from this Cloud9 workspace has since been pushed to Heroku, at the foll
 URL:
 
 http://cs113-optional-exam-ysl2.herokuapp.com/
+
+It can also be run by the following:
+
+PORT=$PORT SESSION_SECRET='sdf' MONGO_URL="mongodb://localhost:27017/social-todo" ./node_modules/.bin/nodemon index.js
