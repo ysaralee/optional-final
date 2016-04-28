@@ -63,8 +63,7 @@ app.post('/posts/new', function (req, res) {
   });
 });
 
-
-// delete all posts in database, reset the chat count to zero
+// delete all chats in database, reset the chat count to zero
 app.get('/posts/delete', function(req, res){
   Chats.find({}).remove().exec();
   startChat = 0;
@@ -83,6 +82,7 @@ app.get('/posts/:id', function (req, res) {
     
   });
 });
+
 
 
 // Start the server
