@@ -6,8 +6,8 @@ var session = require('express-session');
 var MongoDBStore = require('connect-mongodb-session')(session);
 var mongoose = require('mongoose');
 mongoose.connect(process.env.MONGO_URL);
-var Users = require('./models/users.js');
-var Tasks = require('./models/tasks.js');
+var Chats = require('./models/chats.js');
+var startChat = 0;
 
 
 
@@ -29,165 +29,58 @@ app.use(session({
   store: store
 }));
 
-// Middleware that looks up the current user for this sesssion, if there
-// is one.
-app.use(function(req, res, next){
-  if(req.session.userId){
-    Users.findById(req.session.userId, function(err, user){
-      if(!err){
-        res.locals.currentUser = user;
-      }
-      next();
-    });
-  }else{
-    next();
-  }
-});
-
-// Middleware that checks if a user is logged in. If so, the
-// request continues to be processed, otherwise a 403 is returned.
-function isLoggedIn(req, res, next){
-  if(res.locals.currentUser){
-    next();
-  }else{
-    res.sendStatus(403);
-  }
-}
-
-// Middleware that loads a users tasks if they are logged in.
-function loadUserTasks(req, res, next) {
-  if(!res.locals.currentUser){
-    return next();
-  }
-  Tasks.find({}).or([
-      {owner: res.locals.currentUser},
-      {collaborators: res.locals.currentUser.email}])
-    .exec(function(err, tasks){
-      if(!err){
-        res.locals.tasks = tasks;
-        for (i=0; i<tasks.length; i++)
-        {
-          if (res.locals.currentUser._id.toString() == tasks[i].owner.toString()){
-            tasks[i].isOwner = true;
-          }
-        }
-      }
-      next();
-  });
-}
+// NEW FUNCTIONS GO BELOW THIS
 
 // Return the home page after loading tasks for users, or not.
-app.get('/', loadUserTasks, function (req, res) {
+app.get('/', function (req, res) {
       res.render('index');
 });
 
-// Handle submitted form for new users
-app.post('/user/register', function (req, res) {
-  if(req.body.password !== req.body.password_confirmation){
-      return res.render('index', {errors: "Password and password confirmation do not match"});
-  }
-  if (req.body.password.length < 1) {
-    err = 'Bad password';
-    res.render('index', {errors: err});
-    return;
-  }
+// GET request to foo
+app.get('/foo', function (req, res) {
+      res.header("Content-Type", "text/plain");
+      res.send('woot');
+});
 
-  // Save the new user
-  var newUser = new Users();
-  newUser.hashed_password = req.body.password;
-  newUser.email = req.body.email;
-  newUser.name = req.body.fl_name;
-  newUser.save(function(err, user){
-    // If there are no errors, redirect to home page
-    if(user && !err){
-      req.session.userId = user._id;
+// GET request to /mrw/semester-ends.gif
+app.get('/mrw/semester-ends.gif', function (req, res) {
+      res.redirect(`https://i.imgur.com/pXjrQ.gif`);
+});
+
+app.post('/new-chat', function (req, res) {
+  var chatData = req.body.data;
+  var newChat = new Chats();
+  newChat.text = chatData;
+  newChat.insertOrder = startChat;
+  newChat.save(function(err, savedChat){
+    if(err || !savedChat){
+      res.send('Error saving task!');
+    }else{
+      startChat = startChat + 1;
       res.redirect('/');
     }
-    var errors = "Error registering you.";
-    if(err){
-      if(err.errmsg && err.errmsg.match(/duplicate/)){
-        errors = 'Account with this email already exists!';
-      }
-      return res.render('index', {errors: errors});
-    }
   });
 });
 
-
-
-app.post('/user/login', function (req, res) {
-  // Try to find this user by email
-  Users.findOne({email: req.body.email}, function(err, user){
-
-    if(err || !user){
-      res.send('Invalid email address');
-      return;
-    }
-
-    // See if the hash of their passwords match
-    user.comparePassword(req.body.password, function(err, isMatch){
-      if(err || !isMatch){
-        res.send('Invalid password');
-      }else{
-        req.session.userId = user._id;
-        res.redirect('/');
-      }
-    });
-  });
-});
-
-// Log a user out
-app.get('/user/logout', function(req, res){
-  req.session.destroy(function(){
-    res.redirect('/');
-  });
-});
-
-//  All the controllers and routes below this require
-//  the user to be logged in.
-app.use(isLoggedIn);
-
-// Mark task as complete when the button is clicked
-app.post('/task/complete/:id', function(req, res){
-  console.log("Hey!");
-  Tasks.findById(req.params.id, function(err, task){
-  if(task.isComplete){
-    Tasks.update({_id: req.params.id}, {isComplete: false}, function(err){
-      if (err) { res.send('Error un-marking the task.') }
-    });
-  }
-  else{
-    Tasks.update({_id: req.params.id}, {isComplete: true}, function(err){
-      if (err) { res.send('Error marking the task.') }
-    });
-  }
-  });
+app.get('/chats/delete', function(req, res){
+  Chats.find({}).remove().exec();
+  startChat = 0;
   res.redirect('/');
 });
 
+app.get('/chats/:id', function (req, res) {
+  Chats.findOne({insertOrder: req.params.id}, function(err, chat){
 
-// Activate function on click of delete button
-app.post('/task/delete/:id', function(req, res){
-  console.log(req.params.id);
-  Tasks.find({_id : req.params.id}).remove().exec();
-res.redirect('/');
-});
-
-// Handle submission of new task form
-app.post('/task/create', function(req, res){
-  var newTask = new Tasks();
-  newTask.owner = res.locals.currentUser._id;
-  newTask.title = req.body.title;
-  newTask.description = req.body.description;
-  newTask.collaborators = [req.body.collaborator1, req.body.collaborator2, req.body.collaborator3];
-  newTask.save(function(err, savedTask){
-    if(err || !savedTask){
-      res.send('Error saving task!');
-    }else{
-      res.redirect('/');
+    if(err || !chat){
+      return res.status(404).send("Not found");
     }
+  
+    return res.send(chat.text);
+    
   });
 });
+
+
 
 // Start the server
 app.listen(process.env.PORT, function () {

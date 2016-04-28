@@ -30,7 +30,7 @@ choose a secret for signing browser cookies.
 
 You can run the server with something similar to
 
-    PORT=5000 SESSION_SECRET='sdf' MONGO_URL="mongodb://localhost:27017/social-todo" ./node_modules/.bin/nodemon index.js
+    PORT=$PORT SESSION_SECRET='sdf' MONGO_URL="mongodb://localhost:27017/social-todo" ./node_modules/.bin/nodemon index.js
 
 where your values of `PORT`, `SESSION_SECRET`, and `MONGO_URL` could be different.
 If you are on Cloud9, don't set `PORT`. `SESSION_SECRET` can be whatever you
