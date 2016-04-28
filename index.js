@@ -84,7 +84,6 @@ app.get('/posts/:id', function (req, res) {
 });
 
 
-
 // Start the server
 app.listen(process.env.PORT, function () {
   console.log('Example app listening on port ' + process.env.PORT);
